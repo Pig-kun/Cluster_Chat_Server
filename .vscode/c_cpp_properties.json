@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include/server"
+                "${workspaceFolder}/include/server",
+                "${workspaceFolder}/test/test_json"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
