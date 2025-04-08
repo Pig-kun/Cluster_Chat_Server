@@ -17,7 +17,7 @@ public:
     // 更新操作
     bool update(string sql);
     // 查询操作
-    MYSQL_RES* _query(string sql);
+    MYSQL_RES* query(string sql);
     // 获取连接
     MYSQL * getConnection();
 

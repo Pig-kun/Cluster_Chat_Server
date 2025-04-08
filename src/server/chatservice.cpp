@@ -31,9 +31,47 @@ MsgHandler ChatService::getHandler(int msgid){
     }
 }
 
-// 处理登录业务
+// 处理登录业务 id pwd
 void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time){
-    LOG_INFO << "do login service!!!";
+    int id = js["id"];
+    string pwd = js["password"];
+    User user = _usermodel.query(id);
+    if(user.getID() == id && user.getPassword() == pwd){
+        if(user.getState() == "online"){
+            // 该用户已经登录，不允许重复登录
+            json response;
+            response["msgid"] = LOGIN_MSG_ACK;
+            response["erron"] = 2;
+            response["errmsg"] = "该账号已经登录，请重新输入新账号";
+            conn->send(response.dump());
+        }else{
+            // 登录成功，更新用户状态信息，state -> online
+            user.setState("online");
+            _usermodel.updateState(user);
+            json response;
+            response["msgid"] = LOGIN_MSG_ACK;
+            response["erron"] = 0;
+            response["id"] = user.getID();
+            response["name"] = user.getName();
+            conn->send(response.dump());
+        }
+    }else{
+        
+        // 该用户不存在，用户存在但是密码错误，登录失败
+        if(user.getID() == -1){
+            json response;
+            response["msgid"] = LOGIN_MSG_ACK;
+            response["erron"] = 1;
+            response["errmsg"] = "用户不存在";
+            conn->send(response.dump());
+        }else{
+            json response;
+            response["msgid"] = LOGIN_MSG_ACK;
+            response["erron"] = 1;
+            response["errmsg"] = "密码错误";
+            conn->send(response.dump());
+        }
+    }
 }
     
 // 处理注册业务 name password
