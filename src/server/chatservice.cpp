@@ -15,6 +15,7 @@ ChatService* ChatService::instance(){
 ChatService::ChatService(){
     _msgHandlerMap.insert({LOGIN_MSG, std::bind(&ChatService::login, this, _1, _2, _3)});
     _msgHandlerMap.insert({REG_MSG, std::bind(&ChatService::reg, this, _1, _2, _3)});
+    _msgHandlerMap.insert({ONE_CHAT_MSG, std::bind(&ChatService::oneChat, this, _1, _2, _3)});
 }
 
 // 获取消息对应的处理器
@@ -125,4 +126,20 @@ void ChatService::clientCloseException(const TcpConnectionPtr conn){
         user.setState("offline");
         _usermodel.updateState(user);
     }   
+}
+
+// 一对一聊天业务
+void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time){
+    int toid = js["to"].get<int>();
+
+    {
+        lock_guard<mutex> lock(_connMutex);
+        auto it = _userConnMap.find(toid);
+        if(it != _userConnMap.end()){
+            // todi用户在线，转发消息  
+            it->second->send(js.dump());
+            return;
+        }
+    }
+    // toid用户不在线，存储离线消息
 }
