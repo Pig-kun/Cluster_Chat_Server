@@ -10,6 +10,7 @@ using namespace std;
 using namespace muduo;
 using namespace muduo::net;
 
+#include "offlinemessage.hpp"
 #include "usermodel.hpp"
 #include "json.hpp"
 using json = nlohmann::json;
@@ -45,6 +46,9 @@ private:
 
     // 定义互斥锁，保证_userConnMap的线程安全
     mutex _connMutex;
+
+    // 存储离线消息
+    OfflineMsgModel _offlineMsgModel;
 
 };
 
