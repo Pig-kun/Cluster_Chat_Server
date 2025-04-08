@@ -22,6 +22,9 @@ bool MySQL::connect(){
     if(p != nullptr){
         // C和C++代码默认的编码字符是ASCLL，如果不设置，从MySQL上拿下来的中文显示有误为 “？”
         mysql_query(_conn, "set names gbk");
+        LOG_INFO << "connect mysql success!";
+    }else{
+        LOG_INFO << "connect mysql fail!";
     }
     return p;
 }
@@ -42,4 +45,9 @@ MYSQL_RES* MySQL::_query(string sql){
         return nullptr;
     }
     return mysql_use_result(_conn);
+}
+
+// 获取连接
+MYSQL * MySQL::getConnection(){
+    return _conn;
 }
