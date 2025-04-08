@@ -3,6 +3,7 @@
 #include <muduo/base/Logging.h>
 
 using namespace muduo;
+using namespace std;
 
 // 获取单例对象的接口函数
 ChatService* ChatService::instance(){
@@ -45,6 +46,12 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time){
             response["errmsg"] = "该账号已经登录，请重新输入新账号";
             conn->send(response.dump());
         }else{
+            // 登陆成功，记录用户连接信息
+            {
+                // {}减少锁的作用域
+                lock_guard<mutex> lock(_connMutex);
+                _userConnMap.insert({id, conn});
+            }
             // 登录成功，更新用户状态信息，state -> online
             user.setState("online");
             _usermodel.updateState(user);

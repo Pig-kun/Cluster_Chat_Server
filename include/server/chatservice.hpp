@@ -4,6 +4,8 @@
 #include <muduo/net/TcpConnection.h>
 #include <unordered_map>
 #include <functional>
+#include <mutex>
+
 using namespace std;
 using namespace muduo;
 using namespace muduo::net;
@@ -33,6 +35,12 @@ private:
 
     // 数据操作类对象
     UserModel _usermodel;
+
+    // 存储在线用户的通信连接
+    unordered_map<int, TcpConnectionPtr> _userConnMap;
+
+    // 定义互斥锁，保证_userConnMap的线程安全
+    mutex _connMutex;
 
 };
 
