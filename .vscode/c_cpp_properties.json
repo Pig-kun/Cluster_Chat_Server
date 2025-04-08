@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include/server",
-                "${workspaceFolder}/test/test_json"
+                "${workspaceFolder}/test/test_json",
+                "${workspaceFolder}/include/server/db"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
