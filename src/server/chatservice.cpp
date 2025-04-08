@@ -105,3 +105,24 @@ void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time){
         conn -> send(response.dump());
     }
 }
+
+// 处理客户端异常退出
+void ChatService::clientCloseException(const TcpConnectionPtr conn){
+    User user;
+    {
+        lock_guard<mutex> lock(_connMutex);
+        for(auto it = _userConnMap.begin(); it != _userConnMap.end(); ++it){
+            if(it->second == conn){
+                user.setID(it->first);
+                // 从map表删除用户的连接信息
+                _userConnMap.erase(it);
+                break;
+            }
+        }
+    }
+    // 更新用户的状态信息
+    if (user.getID() != -1){
+        user.setState("offline");
+        _usermodel.updateState(user);
+    }   
+}
