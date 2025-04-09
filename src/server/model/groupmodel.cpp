@@ -19,7 +19,7 @@ bool GroupModel::createGroup(Group &group){
 }
 
 // 加入群组
-bool addGroup(int userid, int groupid, string role){
+bool GroupModel::addGroup(int userid, int groupid, string role){
     // 1.组装SQL语句
     char sql[1024] = {0};
     sprintf(sql, "insert into into GroupUser values(%d, %d, '%s')",
@@ -32,7 +32,7 @@ bool addGroup(int userid, int groupid, string role){
 }
 
 // 查询用户所在的群组信息
-vector<Group> queryGroups(int userid){
+vector<Group> GroupModel::queryGroups(int userid){
     /*
     1. 先根据userid在froupuser表中查询出该用户所属的群组信息
     2. 再根据群组信息，查询属于该群组的所有用户的userid，并且和user表进行多表联合查询，查出用户的详细信息
@@ -80,7 +80,7 @@ vector<Group> queryGroups(int userid){
 }
 
 // 根据指定的groupid查询群组用户ID列表，除userid自己，主要用户群聊业务给群组其他成员群发消息
-vector<int> queryGroupUsers(int userid, int groupid){
+vector<int> GroupModel::queryGroupUsers(int userid, int groupid){
     char sql[1024] = {0};
     sprintf(sql, "select userid from GroupUser where groupid=%d and userid!=%d", groupid, userid);
     vector<int> vec;
