@@ -19,6 +19,12 @@ ChatService::ChatService(){
     _msgHandlerMap.insert({ONE_CHAT_MSG, std::bind(&ChatService::oneChat, this, _1, _2, _3)});
 }
 
+// 服务器异常，重置用户的状态信息
+void ChatService::reset(){
+    // 把online状态的用户，设置成offline
+    _usermodel.resetState();
+}
+
 // 获取消息对应的处理器
 MsgHandler ChatService::getHandler(int msgid){
     // 记录错误日志，msgid没有对应的时间处理回调
