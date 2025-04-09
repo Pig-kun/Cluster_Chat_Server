@@ -55,7 +55,7 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time){
             json response;
             response["msgid"] = LOGIN_MSG_ACK;
             response["erron"] = 2;
-            response["errmsg"] = "该账号已经登录，请重新输入新账号";
+            response["errmsg"] = "this user has already logged in";
             conn->send(response.dump());
         }else{
             // 登陆成功，记录用户连接信息
@@ -104,13 +104,13 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time){
             json response;
             response["msgid"] = LOGIN_MSG_ACK;
             response["erron"] = 1;
-            response["errmsg"] = "用户不存在";
+            response["errmsg"] = "the user is not exist";
             conn->send(response.dump());
         }else{
             json response;
             response["msgid"] = LOGIN_MSG_ACK;
             response["erron"] = 1;
-            response["errmsg"] = "密码错误";
+            response["errmsg"] = "the password is wrong";
             conn->send(response.dump());
         }
     }
