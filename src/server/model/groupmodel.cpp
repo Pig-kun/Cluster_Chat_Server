@@ -5,7 +5,7 @@
 bool GroupModel::createGroup(Group &group){
     // 1.组装SQL语句
     char sql[1024] = {0};
-    sprintf(sql, "insert into into AllGroup(groupname, groupdesc) values('%s', '%s')",
+    sprintf(sql, "insert into AllGroup(groupname, groupdesc) values('%s', '%s')",
         group.getName().c_str(), group.getDesc().c_str());
 
     MySQL mysql;
@@ -22,7 +22,7 @@ bool GroupModel::createGroup(Group &group){
 bool GroupModel::addGroup(int userid, int groupid, string role){
     // 1.组装SQL语句
     char sql[1024] = {0};
-    sprintf(sql, "insert into into GroupUser values(%d, %d, '%s')",
+    sprintf(sql, "insert into GroupUser values(%d, %d, '%s')",
         groupid, userid, role.c_str());
 
     MySQL mysql;
