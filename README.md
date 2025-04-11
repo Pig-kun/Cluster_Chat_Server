@@ -1,5 +1,24 @@
 # Cluster_Chat_Server
 基于muduo网络库开发的集群聊天服务器，涉及Json序列化与反序列化，nginx，Redis，MySQL等
+项目编译需在linux系统环境下，配置mysql-server, redis, nginx, 安装muduo网络库
+
+
+# 一键编译
+```bash
+./autobuild.sh
+```
+# 执行程序
+```bash
+# 服务器
+./bin/ChatServer 127.0.0.1 6000
+./bin/ChatServer 127.0.0.1 6002
+# ......
+# 客户端
+./bin/ChatClient 127.0.0.1 8000    # nginx端口
+./bin/ChatClient 127.0.0.1 8000    # 多个客户端均匀分配到服务器上
+.........
+```
+
 
 # 创建数据库
 ```sql
@@ -63,6 +82,7 @@ stream {
         upstream MyServer {
                 server 127.0.0.1:6000 weight=1 max_fails=3 fail_timeout=30s;
                 server 127.0.0.1:6002 weight=1 max_fails=3 fail_timeout=30s;
+                # 若需要配置多个服务器，在此添加
         }
 
         server {
