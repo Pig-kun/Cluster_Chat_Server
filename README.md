@@ -33,7 +33,7 @@ CREATE TABLE GroupUser(
 
 CREATE TABLE OfflineMessage(
     userid INT PRIMARY KEY,
-    message VARCHAR(50) NOT NULL
+    message VARCHAR(500) NOT NULL
 );
 ```
 # 配置Nginx，实现负载均衡功能
@@ -61,13 +61,13 @@ vim nginx.conf
 # nginx tcp loadbalace config
 stream {
         upstream MyServer {
-                server 127.0.0.0:6001 weight=1 max_fails=3 fail_timeout=30s;
+                server 127.0.0.1:6000 weight=1 max_fails=3 fail_timeout=30s;
                 server 127.0.0.1:6002 weight=1 max_fails=3 fail_timeout=30s;
         }
 
         server {
                 proxy_connect_timeout 1s;
-                #proxy_timeout 3s;
+
                 listen 8000;
                 proxy_pass MyServer;
                 tcp_nodelay on;
@@ -84,3 +84,4 @@ stream {
 ./nginx -s reload
 # 关闭
 ./nginx -s stop
+启动客户端以后，由于nginx监听的是 8000端口，客户端直接访问nginx端口，无需知道服务器端口。在nginx配置中配置了127.0.0.1 6000 和 127.0.0.1 6002 两个端口，多个客户端访问nginx，nginx会通过负载均衡算法，将客户端请求平均分配到两个服务器上

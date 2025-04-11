@@ -10,6 +10,7 @@ using namespace std;
 using namespace muduo;
 using namespace muduo::net;
 
+#include "redis.hpp"
 #include "groupmodel.hpp"
 #include "friendmodel.hpp"
 #include "offlinemessage.hpp"
@@ -46,6 +47,8 @@ public:
     void clientCloseException(const TcpConnectionPtr conn);
     // 服务器异常，重置用户的状态信息
     void reset();
+
+    void handleRedisSubscribeMessage(int userid, string msg);
 private:
     ChatService();
 
@@ -69,6 +72,9 @@ private:
 
     // 群组操作对象
     GroupModel _groupModel;
+
+    //redis操作对象
+    Redis _redis;
 
 };
 
